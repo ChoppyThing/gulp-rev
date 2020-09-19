@@ -8,6 +8,9 @@ const sortKeys = require('sort-keys');
 const modifyFilename = require('modify-filename');
 const Vinyl = require('vinyl');
 const PluginError = require('plugin-error');
+const fs = require('fs');
+
+var manifestJson = {};
 
 function relativePath(base, filePath) {
 	filePath = filePath.replace(/\\/g, '/');
@@ -147,6 +150,9 @@ plugin.manifest = (path_, options) => {
 			callback();
 			return;
 		}
+		
+		manifestJson[opts.newPath + Object.keys(manifest)] = opts.newPath + manifest[Object.keys(manifest)];
+		fs.writeFileSync(opts.newManifest, JSON.stringify(manifestJson));
 
 		(async () => {
 			try {
